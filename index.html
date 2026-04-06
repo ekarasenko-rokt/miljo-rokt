@@ -1,0 +1,204 @@
+ <!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<title>miljø-røkt</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial;
+  background: #0b0b0b;
+  color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  padding: 40px;
+}
+
+header {
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 42px;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  color: #aaa;
+  margin-top: 10px;
+}
+
+.badges {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #888;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.card {
+  background: #161616;
+  padding: 20px;
+  border-radius: 14px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: #1f1f1f;
+}
+
+.price {
+  color: #ff7a00;
+  font-size: 18px;
+}
+
+button {
+  background: #ff7a00;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.cart {
+  width: 340px;
+  background: #000;
+  padding: 25px;
+  border-left: 1px solid #222;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.vipps {
+  background: #ff5b24;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="main">
+    <header>
+      <h1>🔥 miljø-røkt</h1>
+      <p class="subtitle">Ekte røykte delikatesser fra Østfold</p>
+      <div class="badges">
+        Kortreist • Håndlaget • Uten tilsetningsstoffer
+      </div>
+    </header>
+
+    <div class="products" id="products"></div>
+
+    <footer>
+      📍 Levering i hele Østfold<br>
+      📞 Kontakt: +47 XXX XX XXX
+    </footer>
+  </div>
+
+  <div class="cart">
+    <h2>🛒 Handlekurv</h2>
+    <ul id="cart"></ul>
+
+    <p><strong>Total: <span id="total">0</span> kr</strong></p>
+
+    <button onclick="sendOrder()">Bestill via e-post</button>
+    <button class="vipps" onclick="vippsOrder()">Betal med Vipps</button>
+  </div>
+
+</div>
+
+<script>
+const products = [
+  {name: "Røkt pølse", price: 120},
+  {name: "Bacon", price: 150},
+  {name: "Røkt ribbe", price: 220},
+  {name: "Røkt kylling", price: 140},
+  {name: "Spekeskinke", price: 260},
+  {name: "Røkt laks", price: 300}
+];
+
+const cart = [];
+
+function renderProducts() {
+  const container = document.getElementById("products");
+
+  products.forEach((p, i) => {
+    container.innerHTML += `
+      <div class="card">
+        <h3>${p.name}</h3>
+        <p class="price">${p.price} kr</p>
+        <button onclick="addToCart(${i})">Legg i handlekurv</button>
+      </div>
+    `;
+  });
+}
+
+function addToCart(i) {
+  cart.push(products[i]);
+  renderCart();
+}
+
+function renderCart() {
+  const list = document.getElementById("cart");
+  const total = document.getElementById("total");
+
+  list.innerHTML = "";
+  let sum = 0;
+
+  cart.forEach(item => {
+    list.innerHTML += `<li>${item.name} - ${item.price} kr</li>`;
+    sum += item.price;
+  });
+
+  total.innerText = sum;
+}
+
+function buildOrderText() {
+  let text = "Bestilling:%0A";
+  cart.forEach(item => {
+    text += `- ${item.name} (${item.price} kr)%0A`;
+  });
+  text += `%0ATotal: ${document.getElementById("total").innerText} kr`;
+  return text;
+}
+
+function sendOrder() {
+  const text = buildOrderText();
+  window.location.href = "mailto:din@email.no?subject=Bestilling miljø-røkt&body=" + text;
+}
+
+function vippsOrder() {
+  const amount = document.getElementById("total").innerText;
+  alert("Send " + amount + " kr til Vipps: 123456\nSkriv navn + telefon.");
+}
+
+renderProducts();
+</script>
+
+</body>
+</html>
